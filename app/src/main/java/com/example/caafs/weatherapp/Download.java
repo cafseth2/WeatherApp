@@ -11,6 +11,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import static java.lang.Double.parseDouble;
+
 public class Download extends AsyncTask<String,Void,String> {
     @Override
     protected String doInBackground(String... URL) {
@@ -39,9 +41,11 @@ public class Download extends AsyncTask<String,Void,String> {
         try {
             JSONObject object = new JSONObject(endResult);
             JSONObject weatherData = new JSONObject((object.getString("main")));
-            Double temp = Double.parseDouble(weatherData.getString("temp"));
+            double temp = parseDouble(weatherData.getString("temp"));
             int fTemp = (int) (temp * 1.8 - 459.67);
+            MainActivity.tempText.setText(String.valueOf(fTemp));
             String place = object.getString("name");
+            MainActivity.placeText.setText(place);
         } catch (Exception e) {
             e.printStackTrace();
         }

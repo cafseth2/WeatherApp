@@ -15,18 +15,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
-
+    static TextView placeText;
+    static TextView tempText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.content_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        placeText = (TextView)findViewById(R.id.nameTextView);
+        tempText = (TextView)findViewById(R.id.tempView);
         Download task = new Download();
         LocationManager location = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        assert location != null;
         String provide = location.getBestProvider(new Criteria(), false);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -39,19 +45,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         Location locate = location.getLastKnownLocation(provide);
-        Double latitude = locate.getLatitude();
-        Double longitude = locate.getLongitude();
+        double latitude = locate.getLatitude();
+        double longitude = locate.getLongitude();
         task.execute("http://samples.openweathermap.org/data/2.5/weather?lat=" + String.valueOf(latitude) + "&lon=" + String.valueOf(longitude) + "&appid=04f543a486015bfdb8668245febde59a");
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-    }
+        }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
